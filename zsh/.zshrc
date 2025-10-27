@@ -7,8 +7,18 @@ fi
 source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Vi mode
+bindkey -v
+
+# Make '^v' in normal mode open command in editor
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd '^V' edit-command-line
+
 # Completions
 autoload -Uz compinit && compinit
+source <(kubectl completion zsh)
+compdef k=kubectl
 
 # History
 HISTFILE=$HOME/.zhistory
@@ -22,23 +32,31 @@ source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Tools
+eval "$(jenv init -)"
 eval "$(zoxide init zsh)"
 eval "$(fzf --zsh)"
+
+# make completion case-insensitive for cd and for zsh-autosuggestions ghost text suggestions.
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+ZSH_AUTOSUGGEST_CASE_INSENSITIVE=1
 
 # Environment
 export EDITOR="nvim"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 export PATH="$HOME/.jenv/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client@8.4/bin:$PATH"
 export TMUX_THEME="gruvbox"
 
 # Ruby
-export GEM_HOME="/opt/homebrew/lib/ruby/gems/3.3.0"
-export PATH="$GEM_HOME/bin:/opt/homebrew/opt/ruby/bin:$PATH"
+export GEM_HOME="$HOME/.gem"
+export GEM_PATH="$HOME/.gem/ruby/bin"
+export PATH="$GEM_PATH:$PATH"
 
 # Aliases
 alias ls="eza --icons=always"
 alias cd="z"
+alias k="kubectl"
 
 # Git aliases
 alias g="git"
@@ -62,7 +80,7 @@ q() {
     q "$@"
 }
 
-# Load config files
+# Load config files for mqc
 for conf in "$HOME/.config/zsh/config.d/"*.zsh; do
   source "${conf}"
 done

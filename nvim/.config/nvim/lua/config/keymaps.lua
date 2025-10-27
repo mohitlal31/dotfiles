@@ -13,3 +13,6 @@ vim.keymap.set("n", "<leader>cp", function()
   vim.fn.setreg("+", path)
   print("Copied: " .. path)
 end, { desc = "Copy file path" })
+
+-- Save without formatting
+vim.keymap.set("n", "<leader>W", "<cmd>noautocmd w<cr>", { desc = "Save without formatting" })
