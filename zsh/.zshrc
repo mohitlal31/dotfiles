@@ -57,6 +57,7 @@ export PATH="$GEM_PATH:$PATH"
 alias ls="eza --icons=always"
 alias cd="z"
 alias k="kubectl"
+alias qq="kiro-cli"
 
 # Git aliases
 alias g="git"
