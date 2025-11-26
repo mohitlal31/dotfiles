@@ -58,6 +58,7 @@ alias ls="eza --icons=always"
 alias cd="z"
 alias k="kubectl"
 alias qq="kiro-cli"
+alias grep="rg"
 
 # Git aliases
 alias g="git"
