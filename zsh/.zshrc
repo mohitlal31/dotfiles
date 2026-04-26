@@ -64,6 +64,8 @@ alias qq="kiro-cli"
 alias cc="claude"
 alias grep="rg"
 alias yp="pwd | pbcopy" # yp = yank path
+yf() { realpath "$1" | pbcopy } # yf = yank file path
+compdef _files yf
 
 # Terraform aliases
 alias tf="terraform"
