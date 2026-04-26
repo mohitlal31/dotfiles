@@ -10,6 +10,16 @@ return {
           commit = "/commit/{commit}",
         }
       }
-    }
+    },
+    picker = {
+      sources = {
+        files = {
+          hidden = true,
+        },
+        grep = {
+          hidden = true,
+        },
+      },
+    },
   }
 }

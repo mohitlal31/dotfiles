@@ -21,11 +21,14 @@ source <(kubectl completion zsh)
 compdef k=kubectl
 
 # History
-HISTFILE=$HOME/.zhistory
-HISTSIZE=10000
-SAVEHIST=10000
+HISTFILE=~/.zsh_history
+HISTSIZE=200000
+SAVEHIST=200000
+setopt inc_append_history
+setopt hist_ignore_all_dups
+setopt hist_expire_dups_first
+setopt extended_history
 setopt share_history
-setopt hist_ignore_dups
 
 # Plugins
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -58,7 +61,15 @@ alias ls="eza --icons=always"
 alias cd="z"
 alias k="kubectl"
 alias qq="kiro-cli"
+alias cc="claude"
 alias grep="rg"
+alias cp="pwd | pbcopy" # cp = copy path
+
+# Terraform aliases
+alias tf="terraform"
+alias tfi='terraform init'
+alias tfp="terraform plan"
+alias tfa="terraform apply"
 
 # Git aliases
 alias g="git"
