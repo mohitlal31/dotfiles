@@ -41,6 +41,7 @@ eval "$(fzf --zsh)"
 
 # make completion case-insensitive for cd and for zsh-autosuggestions ghost text suggestions.
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' menu select
 ZSH_AUTOSUGGEST_CASE_INSENSITIVE=1
 
 # Environment
