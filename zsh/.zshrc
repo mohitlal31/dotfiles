@@ -63,7 +63,7 @@ alias k="kubectl"
 alias qq="kiro-cli"
 alias cc="claude"
 alias grep="rg"
-alias cp="pwd | pbcopy" # cp = copy path
+alias yp="pwd | pbcopy" # yp = yank path
 
 # Terraform aliases
 alias tf="terraform"
