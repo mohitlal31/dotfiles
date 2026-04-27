@@ -9,6 +9,7 @@ source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 
 # Vi mode
 bindkey -v
+KEYTIMEOUT=1  # 10ms ESC delay for snappy mode switching
 
 # Make '^v' in normal mode open command in editor
 autoload -z edit-command-line
@@ -29,6 +30,9 @@ setopt hist_ignore_all_dups
 setopt hist_expire_dups_first
 setopt extended_history
 setopt share_history
+
+# Globbing
+setopt extended_glob
 
 # Plugins
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -59,6 +63,7 @@ export PATH="$GEM_PATH:$PATH"
 
 # Aliases
 alias ls="eza --icons=always"
+alias ll="eza -la --icons=always --git"
 alias cd="z"
 alias k="kubectl"
 alias qq="kiro-cli"
