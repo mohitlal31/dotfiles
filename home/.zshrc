@@ -3,8 +3,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Load Powerlevel10k
-source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+# Load Powerlevel10k (from Nix, via the per-user profile)
+NIX_ZSH_SHARE="/etc/profiles/per-user/$USER/share"
+[[ -r $NIX_ZSH_SHARE/zsh/themes/powerlevel10k/powerlevel10k.zsh-theme ]] \
+  && source $NIX_ZSH_SHARE/zsh/themes/powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Vi mode
@@ -34,9 +36,11 @@ setopt share_history
 # Globbing
 setopt extended_glob
 
-# Plugins
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Plugins (from Nix)
+[[ -r $NIX_ZSH_SHARE/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] \
+  && source $NIX_ZSH_SHARE/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -r $NIX_ZSH_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] \
+  && source $NIX_ZSH_SHARE/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Tools
 eval "$(jenv init -)"

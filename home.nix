@@ -34,6 +34,11 @@ in
     grpcurl
     yamllint
 
+    # zsh prompt + plugins (sourced by ~/.zshrc from the per-user profile)
+    zsh-powerlevel10k
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+
     # ── still on Homebrew ── uncomment to port, then delete from
     # configuration.nix `brews` and `brew uninstall`. Left on brew on purpose:
     # git      → keep for the osxkeychain credential helper

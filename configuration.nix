@@ -16,6 +16,12 @@
   # left alone and still sourced afterwards.
   programs.zsh.enable = true;
 
+  # The per-user profile only links a subset of share/ by default (man, zsh,
+  # terminfo, …). zsh-syntax-highlighting installs to share/zsh-syntax-highlighting,
+  # which isn't in that set, so link it explicitly. (p10k + zsh-autosuggestions
+  # live under share/zsh, already linked.)
+  environment.pathsToLink = [ "/share/zsh-syntax-highlighting" ];
+
   # ── macOS system defaults ──────────────────────────────────────────────
   # Deliberately conservative: only two harmless ones are active. Uncomment
   # anything you want Nix to enforce, then `./rebuild.sh`.
@@ -54,7 +60,6 @@
       "asdf"
       "aws-sso-util"
       "awscli"
-      "beads"
       "git"
       "go"
       "helm"
@@ -69,7 +74,6 @@
       "mysql-client@8.4"
       "mysql@8.4"
       "node"
-      "powerlevel10k"
       "pyenv-virtualenv"
       "python@3.11"
       "python@3.12"
@@ -78,8 +82,6 @@
       "tfmigrate"
       "tmux"
       "uv"
-      "zsh-autosuggestions"
-      "zsh-syntax-highlighting"
     ];
 
     # GUI apps + fonts. These stay on Homebrew (Nix doesn't manage macOS .app
@@ -87,7 +89,6 @@
     casks = [
       "1password"
       # amazon-q was renamed to kiro-cli by Homebrew (listed below).
-      "beyond-compare"
       "bruno"
       "claude"
       "claude-code"
@@ -100,9 +101,7 @@
       "linearmouse"
       "obsidian"
       "podman-desktop"
-      "postman"
       "raycast"
-      "sequel-ace"
       "session-manager-plugin"
       "shottr"
       "spotify"
