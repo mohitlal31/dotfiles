@@ -72,6 +72,7 @@ alias grep="rg"
 alias yp="pwd | pbcopy" # yp = yank path
 yf() { realpath "$1" | pbcopy } # yf = yank file path
 compdef _files yf
+alias docker="podman"
 
 # Terraform aliases
 alias tf="terraform"
@@ -106,3 +107,46 @@ for conf in "$HOME/.config/zsh/config.d/"*.zsh; do
   source "${conf}"
 done
 unset conf
+
+# SSH to a Marqeta Kubernetes bastion and copy workload creds + kubectl setup to clipboard.
+# Usage: mkssh <cluster>   e.g. mkssh mkprod-useast1-2
+mkssh() {
+    [[ -z $1 ]] && { echo "usage: mkssh <cluster>  e.g. mkssh mkprod-useast1-2"; return 1; }
+    local cluster=$1 region account
+    case $cluster in
+        *useast1*)    region=us-east-1 ;;
+        *useast2*)    region=us-east-2 ;;
+        *uswest2*)    region=us-west-2 ;;
+        *eucentral1*) region=eu-central-1 ;;
+        *) echo "unsupported region in cluster name"; return 1 ;;
+    esac
+    case $cluster in
+        mk*qa*)   account=mq01-qa ;;
+        mk*prod*) account=mq01-prod ;;
+        *) echo "unsupported account for cluster"; return 1 ;;
+    esac
+
+    echo "→ switching to workload role (team-transaction-engine-dev)..."
+    mqc --account-name $account --role-name team-transaction-engine-dev --region-name $region || return 1
+
+    # Resolve bastion instance ID while we still have ec2:DescribeInstances (bastn role doesn't).
+    local instance_id=$(aws ec2 describe-instances \
+        --filters "Name=tag:Name,Values=${cluster}-marqkubed-bastion-asg" \
+                  "Name=instance-state-name,Values=running" \
+        --region $region --output text --query 'Reservations[0].Instances[0].InstanceId')
+    if [[ -z $instance_id || $instance_id == "None" ]]; then
+        echo "Could not find running bastion with tag:Name=${cluster}-marqkubed-bastion-asg in $region"
+        return 1
+    fi
+
+    {
+        aws configure export-credentials --format env | grep -v AWS_CREDENTIAL_EXPIRATION
+        print "aws eks update-kubeconfig --region $region --name $cluster"
+        print "kubectl config set-context --current --namespace=transaction-engine"
+        print "alias k=kubectl"
+    } | pbcopy
+    echo "→ workload creds + kubectl setup copied to clipboard."
+
+    echo "→ starting SSM session to $instance_id..."
+    aws ssm start-session --target $instance_id --region $region
+}

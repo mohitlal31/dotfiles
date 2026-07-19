@@ -11,5 +11,12 @@
 *~
 
 # Neovim state files (not config)
-nvim/.config/nvim/lazy-lock.json
-nvim/.config/nvim/lazyvim.json
+home/.config/nvim/lazy-lock.json
+home/.config/nvim/lazyvim.json
+
+# Nix build output
+result
+result-*
+
+# home-manager backups from the first switch
+*.before-nix
