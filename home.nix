@@ -21,8 +21,8 @@ in
   #   4. remove it from configuration.nix `brews`, then `brew uninstall <tool>`
   # A few nixpkgs names differ from brew — noted in comments.
   home.packages = with pkgs; [
-    # ripgrep
-    # fd
+    ripgrep
+    fd
     # fzf
     # eza
     # zoxide
