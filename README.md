@@ -67,8 +67,9 @@ Change the single `user = "..."` line in `flake.nix` to that machine's username
 (`bootstrap.sh` refuses to build until it matches `whoami`), then run
 `./bootstrap.sh`.
 
-## Rollback to the old Stow setup
+## Rollback
 
-Everything above lives on the `nix-migration` branch. Your previous Stow-based
-setup is untouched on `main`: `git checkout main` and re-run `stow` if you ever
-want to walk it back.
+- **Bad rebuild:** `sudo darwin-rebuild --rollback` switches back to the
+  previous system generation.
+- **Un-migrate entirely:** the last pre-Nix (Stow) commit is `b0e467a`.
+  Check it out, remove the home-manager symlinks, and re-run `stow`.
