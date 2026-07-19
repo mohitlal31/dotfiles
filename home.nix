@@ -21,28 +21,26 @@ in
   #   4. remove it from configuration.nix `brews`, then `brew uninstall <tool>`
   # A few nixpkgs names differ from brew — noted in comments.
   home.packages = with pkgs; [
+    # ── ported off Homebrew ──
     ripgrep
     fd
-    # fzf
-    # eza
-    # zoxide
-    # lazygit
-    # gh
-    # git
-    # neovim
-    # gomplate
-    # grpcurl
-    # go
-    # uv
-    # yamllint
-    # nodejs_22          # brew: node
-    # kubectl            # brew: kubernetes-cli
-    # kubernetes-helm    # brew: helm
-    # gnumake            # brew: make
-    # maven
-    # ruby
-    # python312          # brew: python@3.12
-    # python311          # brew: python@3.11
+    fzf
+    eza
+    zoxide
+    lazygit
+    gh
+    neovim
+    gomplate
+    grpcurl
+    yamllint
+
+    # ── still on Homebrew ── uncomment to port, then delete from
+    # configuration.nix `brews` and `brew uninstall`. Left on brew on purpose:
+    # git      → keep for the osxkeychain credential helper
+    # go / nodejs_22 / ruby / python311 / python312 / maven → runtimes, often
+    #            pinned per-project via asdf/jenv/pyenv
+    # kubectl (kubernetes-cli) / kubernetes-helm (helm) → cluster-version tied
+    # gnumake (make) / uv → leave for now
   ];
 
   # ── Dotfiles (symlinked in place — same behavior as your old Stow setup) ─
