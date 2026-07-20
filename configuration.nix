@@ -63,6 +63,8 @@
       "git"
       "go"
       "helm"
+      "herdr"
+      "hunk"
       "jenv"
       "kubernetes-cli"
       "make"
