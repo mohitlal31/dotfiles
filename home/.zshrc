@@ -18,10 +18,33 @@ autoload -z edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd '^V' edit-command-line
 
-# Completions
-autoload -Uz compinit && compinit
-source <(kubectl completion zsh)
-compdef k=kubectl
+# Completions — cached compinit: rebuild the dump at most once a day; otherwise
+# load it with -C, which skips the slow per-launch fpath security audit. Without
+# this a bare compinit re-audits every fpath dir and rebuilds ~/.zcompdump each
+# time a darwin-rebuild bumps fpath mtimes (the 5-6s cold-start spike).
+# (nix-darwin's own compinit is disabled via programs.zsh.enableCompletion=false.)
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+
+# bash-style completion support (must run after compinit). nix-darwin used to
+# provide this in /etc/zshrc; we own it now so it runs in the right order.
+autoload -Uz bashcompinit && bashcompinit
+
+# kubectl completion, cached to a file and regenerated only when the kubectl
+# binary changes — avoids running `kubectl completion zsh` on every shell start.
+if (( $+commands[kubectl] )); then
+  _kube_comp=~/.cache/zsh/kubectl.zsh
+  if [[ ! -r $_kube_comp || $commands[kubectl] -nt $_kube_comp ]]; then
+    mkdir -p ~/.cache/zsh && kubectl completion zsh > $_kube_comp
+  fi
+  source $_kube_comp
+  compdef k=kubectl
+  unset _kube_comp
+fi
 
 # History
 HISTFILE=~/.zsh_history

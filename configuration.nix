@@ -16,6 +16,16 @@
   # left alone and still sourced afterwards.
   programs.zsh.enable = true;
 
+  # ~/.zshrc runs its OWN cached compinit (and bashcompinit). Without disabling
+  # these, nix-darwin also runs a bare `compinit`/`bashcompinit` in /etc/zshrc
+  # (sourced first), so completions initialized TWICE per shell — and a bare
+  # compinit re-audits every fpath dir on launch and rebuilds ~/.zcompdump
+  # whenever a rebuild bumps fpath mtimes, which is the 5-6s cold-start spike.
+  # fpath is still set in /etc/zshenv, so our cached compinit sees everything.
+  # (Re-enable either if you want nix-darwin to own completion init again.)
+  programs.zsh.enableCompletion = false;
+  programs.zsh.enableBashCompletion = false;
+
   # The per-user profile only links a subset of share/ by default (man, zsh,
   # terminfo, …). zsh-syntax-highlighting installs to share/zsh-syntax-highlighting,
   # which isn't in that set, so link it explicitly. (p10k + zsh-autosuggestions
