@@ -17,6 +17,14 @@
 # one-dark, solarized, kanagawa, rose-pine, vesper (+ -light/-day variants).
 name = "gruvbox"
 
+[theme.custom]
+# gruvbox's panel_bg/surface_dim tokens sit ~equal to the #282828 pane bg, so
+# the tab bar and the selected sidebar entry had no visible distinction. Lift
+# them to brighter gruvbox greys (bg1/bg2) to restore the delineation that the
+# catppuccin default had.
+panel_bg    = "#3c3836"   # bg1 - distinct top tab-bar band
+surface_dim = "#504945"   # bg2 - selected sidebar entry highlight
+
 [keys]
 # Prefix: tmux uses Ctrl+Space (herdr default is ctrl+b).
 prefix = "ctrl+space"
@@ -54,3 +62,10 @@ last_pane        = "ctrl+backslash"     # C-\ -> previous pane (tmux nav)
 # GAP vs tmux: tmux resizes with a repeatable `prefix + h/j/k/l`. herdr has no
 # directional resize bindings — only a resize *mode* (now prefix+shift+r), then
 # h/j/k/l inside it. Closest herdr allows.
+
+[ui]
+# herdr's default row_gap is 0 (tighter than older versions); 1 puts a blank row
+# between sidebar entries. Mostly visible once there are multiple workspaces/
+# agents — with a single entry there's little to space out.
+sidebar.spaces.row_gap = 1
+sidebar.agents.row_gap = 1
