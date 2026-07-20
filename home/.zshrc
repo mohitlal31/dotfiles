@@ -67,8 +67,9 @@ setopt extended_glob
 
 # Tools
 eval "$(jenv init -)"
-eval "$(zoxide init zsh)"
 eval "$(fzf --zsh)"
+# NOTE: zoxide init is intentionally at the END of this file — it warns if
+# anything modifies the shell (precmd hooks, etc.) after it initializes.
 
 # make completion case-insensitive for cd and for zsh-autosuggestions ghost text suggestions.
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -89,17 +90,24 @@ export GEM_PATH="$HOME/.gem/ruby/bin"
 export PATH="$GEM_PATH:$PATH"
 
 # Aliases
-alias ls="eza --icons=always"
-alias ll="eza -la --icons=always --git"
-alias cd="z"
+# Output- and behavior-changing aliases are guarded so they DON'T leak into AI
+# coding agents. Claude Code snapshots this file at session start with
+# CLAUDECODE=1 in the env, so guarding on it keeps stock ls/grep/cd out of the
+# agent snapshot (agents parse output and expect standard tool semantics) while
+# my interactive shell (CLAUDECODE unset) still gets the nicer versions.
+if [[ -z $CLAUDECODE ]]; then
+  alias ls="eza --icons=always"
+  alias ll="eza -la --icons=always --git"
+  alias cd="z"
+  alias grep="rg"
+fi
 alias k="kubectl"
 alias qq="kiro-cli"
 alias cc="claude"
-alias grep="rg"
 alias yp="pwd | pbcopy" # yp = yank path
 yf() { realpath "$1" | pbcopy } # yf = yank file path
 compdef _files yf
-alias docker="podman"
+alias docker="podman"   # unguarded: podman is the only runtime, so let agents' `docker ...` route here too
 
 # Terraform aliases
 alias tf="terraform"
@@ -177,3 +185,10 @@ mkssh() {
     echo "→ starting SSM session to $instance_id..."
     aws ssm start-session --target $instance_id --region $region
 }
+
+# zoxide — initialized LAST (per zoxide's guidance) so nothing in this file hooks
+# precmd/chpwd after it. Even so, zoxide's doctor false-positives under
+# powerlevel10k, which reorders precmd_functions at runtime; disable the doctor
+# (zoxide itself works fine — this only suppresses the spurious warning).
+_ZO_DOCTOR=0
+eval "$(zoxide init zsh)"
