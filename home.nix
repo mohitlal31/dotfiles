@@ -60,4 +60,10 @@ in
   # theme *file* is linked — the ~/.config/tmux directory itself stays real.
   home.file.".config/tmux/gruvbox-theme.conf".source =
     link ".config/tmux/gruvbox-theme.conf";
+
+  # herdr writes runtime state (sockets, logs, session.json) into
+  # ~/.config/herdr, so — like the tmux theme above — only the config *file* is
+  # linked, leaving the directory itself real. Keybindings match ~/.tmux.conf.
+  home.file.".config/herdr/config.toml".source =
+    link ".config/herdr/config.toml";
 }

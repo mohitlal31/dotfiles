@@ -1,0 +1,56 @@
+# herdr config — matched to my tmux setup (~/.tmux.conf): gruvbox theme + keybindings.
+#
+# Managed by home-manager: this file is symlinked from
+# dotfiles/home/.config/herdr/config.toml. herdr writes runtime state
+# (sockets, logs, session.json) into the real ~/.config/herdr dir, so only
+# this config.toml file is symlinked — not the directory.
+#
+# Apply changes to a running herdr:  herdr server reload-config
+# (also bound below to prefix+r, matching tmux's "prefix + r" reload.)
+#
+# Full key reference: https://herdr.dev/docs/configuration/
+
+[theme]
+# Gruvbox, matching ~/.config/tmux/gruvbox-theme.conf. herdr ships gruvbox as a
+# built-in, so this one line themes the whole UI (sidebar, tab bar, pane
+# borders, accents). Other built-ins: catppuccin, dracula, nord, tokyo-night,
+# one-dark, solarized, kanagawa, rose-pine, vesper (+ -light/-day variants).
+name = "gruvbox"
+
+[keys]
+# Prefix: tmux uses Ctrl+Space (herdr default is ctrl+b).
+prefix = "ctrl+space"
+
+# Splits — matched to my tmux keys AND their visual result. Note herdr names
+# splits by divider orientation, which is the OPPOSITE of tmux's -h/-v:
+#   tmux `\` (split-window -h) = side-by-side = herdr split_vertical
+#   tmux `-` (split-window -v) = stacked      = herdr split_horizontal
+split_vertical   = "prefix+backslash"   # \  -> side-by-side
+split_horizontal = "prefix+minus"       # -  -> stacked (also herdr's default)
+
+# Maximize/zoom the focused pane: tmux `prefix+m` (herdr default is prefix+z).
+zoom = "prefix+m"
+
+# Reload config: tmux `prefix+r`. herdr defaults reload to prefix+shift+r and
+# uses prefix+r for resize mode, so swap the two to free up prefix+r.
+reload_config = "prefix+r"
+resize_mode   = "prefix+shift+r"
+
+# Pane navigation: match vim-tmux-navigator — Ctrl+h/j/k/l with no prefix, plus
+# C-\ for the previous pane. (prefix+hjkl kept as a fallback.) I don't use
+# Ctrl+H/Ctrl+J for backspace/submit, so intercepting them here is fine.
+focus_pane_left  = ["prefix+h", "ctrl+h"]
+focus_pane_down  = ["prefix+j", "ctrl+j"]
+focus_pane_up    = ["prefix+k", "ctrl+k"]
+focus_pane_right = ["prefix+l", "ctrl+l"]
+last_pane        = "ctrl+backslash"     # C-\ -> previous pane (tmux nav)
+
+# Already identical to my tmux setup (left at herdr defaults, noted for clarity):
+#   new_tab      = "prefix+c"   (tmux: new window in CWD)
+#   copy_mode    = "prefix+["   (tmux: enter copy mode; [ == Ctrl+[ == Esc)
+#   next_tab     = "prefix+n"   (tmux default: next window)
+#   previous_tab = "prefix+p"   (tmux default: previous window)
+#
+# GAP vs tmux: tmux resizes with a repeatable `prefix + h/j/k/l`. herdr has no
+# directional resize bindings — only a resize *mode* (now prefix+shift+r), then
+# h/j/k/l inside it. Closest herdr allows.
